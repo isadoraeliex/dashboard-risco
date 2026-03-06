@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Gestão de Riscos - Versão Anonimizada</title>
+    <title>ELIEX.AI | Dashboard de Gestão de Riscos</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,12 +14,24 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --elexa-orange: #E94E1B;
+            --elexa-white: #FCFCFC;
+            --elexa-dark: #28313B;
+            --bg-white: #FCFCFC;
+            --bg-dark: #1B1B1B;
+            --gray-light: #F5F5F5;
+            --gray-medium: #9CA3AF;
+            --gray-dark: #4B5563;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            background: var(--bg-dark);
             min-height: 100vh;
-            color: #f8fafc;
+            color: var(--elexa-white);
             padding: 20px;
+            line-height: 1.6;
         }
 
         .container {
@@ -27,44 +39,114 @@
             margin: 0 auto;
         }
 
+        /* Header com Logo */
         .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+            position: relative;
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--elexa-orange);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 20px;
+            color: var(--elexa-white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .logo-text {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--elexa-white);
+            letter-spacing: -2px;
+        }
+
+        .logo-text .eli {
+            color: var(--elexa-white);
+        }
+
+        .logo-text .ex {
+            color: var(--elexa-orange);
+        }
+
+        .logo-text .ai {
+            color: var(--elexa-white);
+            font-weight: 300;
+        }
+
+        .header-content {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
+            margin-top: 10px;
         }
 
         .header h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--elexa-white);
+            margin-bottom: 8px;
         }
 
         .header p {
-            color: #94a3b8;
+            color: var(--gray-medium);
             font-size: 1rem;
+            font-weight: 400;
         }
 
         .badge-anon {
-            display: inline-block;
-            background: rgba(245, 158, 11, 0.2);
-            color: #fbbf24;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(233, 78, 27, 0.15);
+            color: var(--elexa-orange);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
             font-weight: 600;
-            margin-top: 10px;
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            margin-top: 15px;
+            border: 1px solid rgba(233, 78, 27, 0.3);
+            backdrop-filter: blur(10px);
         }
 
+        /* Grid Layout */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 25px;
+            gap: 30px;
+            margin-bottom: 30px;
         }
 
         @media (max-width: 1024px) {
@@ -73,13 +155,39 @@
             }
         }
 
+        /* Cards */
         .card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            padding: 25px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            background: rgba(40, 49, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(252, 252, 252, 0.08);
+            padding: 30px;
+            box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--elexa-orange), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(233, 78, 27, 0.2);
+            box-shadow: 0 30px 80px -20px rgba(233, 78, 27, 0.15);
+        }
+
+        .card:hover::before {
+            opacity: 1;
         }
 
         .card-full {
@@ -87,21 +195,22 @@
         }
 
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            color: #e2e8f0;
-            margin-bottom: 20px;
+            color: var(--elexa-white);
+            margin-bottom: 25px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .card-title::before {
             content: '';
             width: 4px;
-            height: 24px;
-            background: linear-gradient(180deg, #60a5fa, #a78bfa);
+            height: 28px;
+            background: var(--elexa-orange);
             border-radius: 2px;
+            box-shadow: 0 0 20px rgba(233, 78, 27, 0.5);
         }
 
         .chart-container {
@@ -114,12 +223,13 @@
             height: 350px;
         }
 
+        /* Big Numbers */
         .big-number-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 25px;
-            max-width: 800px;
+            gap: 25px;
+            margin-bottom: 30px;
+            max-width: 900px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -131,149 +241,257 @@
         }
 
         .big-number-card {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            border-radius: 16px;
-            padding: 25px;
+            background: linear-gradient(135deg, rgba(40, 49, 59, 0.8) 0%, rgba(27, 27, 27, 0.9) 100%);
+            border: 1px solid rgba(252, 252, 252, 0.1);
+            border-radius: 20px;
+            padding: 35px;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .big-number-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--elexa-orange);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
         }
 
         .big-number-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(96, 165, 250, 0.3);
-            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
+            transform: translateY(-8px);
+            border-color: rgba(233, 78, 27, 0.3);
+            box-shadow: 0 20px 40px -10px rgba(233, 78, 27, 0.2);
+        }
+
+        .big-number-card:hover::after {
+            transform: scaleX(1);
         }
 
         .big-number-label {
-            font-size: 0.85rem;
-            color: #94a3b8;
+            font-size: 0.9rem;
+            color: var(--gray-medium);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 10px;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+            font-weight: 600;
         }
 
         .big-number-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #f8fafc;
-            background: linear-gradient(90deg, #60a5fa, #a78bfa);
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--elexa-white);
+            line-height: 1;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--elexa-white) 0%, var(--gray-medium) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .big-number-sub {
-            font-size: 0.9rem;
-            color: #64748b;
-            margin-top: 5px;
+            font-size: 0.95rem;
+            color: var(--gray-medium);
+            font-weight: 500;
         }
 
         .alert-card {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
-            border: 1px solid rgba(239, 68, 68, 0.2);
+            background: linear-gradient(135deg, rgba(233, 78, 27, 0.15) 0%, rgba(40, 49, 59, 0.8) 100%);
+            border: 1px solid rgba(233, 78, 27, 0.2);
         }
 
         .alert-card .big-number-value {
-            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            background: linear-gradient(135deg, var(--elexa-orange) 0%, #ff6b4a 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
+        /* Details Panel */
         .details-panel {
-            background: rgba(15, 23, 42, 0.5);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            min-height: 150px;
+            background: rgba(27, 27, 27, 0.6);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 25px;
+            border: 1px solid rgba(252, 252, 252, 0.05);
+            min-height: 160px;
+            transition: all 0.3s ease;
+        }
+
+        .details-panel:hover {
+            border-color: rgba(233, 78, 27, 0.15);
         }
 
         .details-title {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
-            color: #60a5fa;
+            color: var(--elexa-orange);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .details-content {
-            color: #cbd5e1;
-            line-height: 1.6;
-            font-size: 0.9rem;
+            color: var(--gray-medium);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .details-content strong {
+            color: var(--elexa-white);
+            font-weight: 600;
         }
 
         .empty-state {
             text-align: center;
-            color: #64748b;
-            padding: 30px 20px;
+            color: var(--gray-dark);
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
         }
 
+        .empty-state svg {
+            opacity: 0.3;
+            stroke: var(--elexa-orange);
+        }
+
+        /* Risk Badges */
         .risk-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-top: 5px;
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .risk-high {
-            background: rgba(239, 68, 68, 0.2);
-            color: #fca5a5;
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: rgba(233, 78, 27, 0.2);
+            color: #ff8c69;
+            border: 1px solid rgba(233, 78, 27, 0.4);
+            box-shadow: 0 0 20px rgba(233, 78, 27, 0.1);
         }
 
         .risk-medium {
-            background: rgba(245, 158, 11, 0.2);
-            color: #fcd34d;
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
             border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
         .risk-low {
-            background: rgba(16, 185, 129, 0.2);
-            color: #6ee7b7;
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
+        /* Footer */
         .footer-note {
             text-align: center;
-            color: #64748b;
-            font-size: 0.8rem;
-            margin-top: 30px;
-            padding: 20px;
-            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            color: var(--gray-dark);
+            font-size: 0.85rem;
+            margin-top: 40px;
+            padding: 30px;
+            border-top: 1px solid rgba(252, 252, 252, 0.05);
+            background: rgba(40, 49, 59, 0.3);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
         }
 
-        .chartjs-tooltip {
-            background: rgba(15, 23, 42, 0.95) !important;
-            border: 1px solid rgba(96, 165, 250, 0.3) !important;
-            border-radius: 8px !important;
-            padding: 12px !important;
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5) !important;
+        .footer-note p {
+            margin: 5px 0;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--elexa-dark);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--elexa-orange);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+
+        /* Loading State */
+        .loading-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📊 Dashboard de Gestão de Riscos</h1>
-            <p>Análise integrada de contratos e ciclo de vida</p>
-            <span class="badge-anon">🔒 VERSÃO ANONIMIZADA</span>
+            <div class="logo-container">
+                <div class="logo-icon">EX</div>
+                <div class="logo-text">
+                    <span class="eli">ELI</span><span class="ex">EX</span><span class="ai">.AI</span>
+                </div>
+            </div>
+            <div class="header-content">
+                <h1>Dashboard de Gestão de Riscos</h1>
+                <p>Análise integrada de contratos e ciclo de vida</p>
+                <span class="badge-anon">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                    VERSÃO ANONIMIZADA
+                </span>
+            </div>
         </div>
 
-        <!-- BIG NUMBERS - AGORA COM 2 CARDS -->
+        <!-- BIG NUMBERS ATUALIZADOS -->
         <div class="big-number-container">
             <div class="big-number-card">
                 <div class="big-number-label">Contratos Vigentes</div>
-                <div class="big-number-value">39</div>
+                <div class="big-number-value">180</div>
                 <div class="big-number-sub">Ativos no sistema</div>
             </div>
             <div class="big-number-card alert-card">
                 <div class="big-number-label">Próximos ao Vencimento</div>
-                <div class="big-number-value">8</div>
+                <div class="big-number-value">23</div>
                 <div class="big-number-sub">Vencem em 90 dias</div>
             </div>
         </div>
@@ -287,8 +505,8 @@
                 </div>
                 <div class="details-panel" id="detailsPanel">
                     <div class="empty-state">
-                        <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-bottom: 10px; opacity: 0.5;">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                         <p>Clique em uma barra para visualizar detalhes do risco</p>
                     </div>
@@ -303,14 +521,14 @@
                 </div>
                 <div class="details-panel">
                     <div class="details-title">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                         </svg>
                         Análise Temporal
                     </div>
                     <div class="details-content">
                         <p>Este gráfico mostra a distribuição dos <strong>134 contratos</strong> com vencimento programado para 2026.</p>
-                        <p style="margin-top: 10px;"><strong>Pico de atenção:</strong> Janeiro/2026 com 20 contratos.</p>
+                        <p style="margin-top: 12px;"><strong style="color: var(--elexa-orange);">Pico de atenção:</strong> Janeiro/2026 com 20 contratos.</p>
                         <p style="margin-top: 5px;"><strong>Período crítico:</strong> Julho/2026 com 13 contratos.</p>
                     </div>
                 </div>
@@ -319,7 +537,7 @@
 
         <div class="footer-note">
             <p>🔒 Esta versão foi anonimizada para distribuição externa. Identidades das contrapartes foram substituídas por classificações setoriais.</p>
-            <p style="margin-top: 5px;">Dashboard gerado em 07/03/2026 03:26 | Dados atualizados conforme última extração</p>
+            <p style="margin-top: 8px;">Dashboard gerado em 07/03/2026 03:26 | Dados atualizados conforme última extração</p>
         </div>
     </div>
 
@@ -328,17 +546,23 @@
         const chartData = [{"label": "Empresa J - Energia", "value": 5966.97, "event": "Atraso no cumprimento do prazo acordado por culpa do CONTRATADO.", "contract_id": "01999cb4-28b9-7efa-8cb7-e92e3888c1db"}, {"label": "Empresa I - Logística", "value": 6279.9, "event": "Inexecução total ou parcial injustificada, execução deficiente, irregular ou inadequada do objeto do contrato, ou descumprimento de prazos e condições estipuladas.", "contract_id": "8d335e76-ec8e-4cb3-bdcc-39139e2a79a5"}, {"label": "Empresa H - Saúde", "value": 11472.0, "event": "Descumprimento total da obrigação contratual, incluindo recusa em firmar o contrato.", "contract_id": "01999cc0-c0e0-7311-a4a1-d349bc457763"}, {"label": "Empresa F - Consultoria", "value": 13200.0, "event": "Inadimplência ou inexecução dos serviços.", "contract_id": "01999d07-f008-75c3-b9ef-03baa2077753"}, {"label": "Empresa G - Educação", "value": 13425.68, "event": "Descumprimento parcial ou total das obrigações contratuais não sanado no prazo de 5 dias após notificação.", "contract_id": "01999d83-a706-7586-9b2f-40c1e3b68bfc"}, {"label": "Empresa E - Serviços", "value": 30000.0, "event": "Desvio de comportamento do Escritório, profissionais ou Subcontratados que ofenda/discrimine clientes/potenciais clientes do Contratante/Empresas Itaú.", "contract_id": "01999d41-9e01-7c27-a401-258873355489"}, {"label": "Empresa F - Consultoria", "value": 37630.0, "event": "Descumprimento de qualquer cláusula e/ou obrigação prevista no contrato.", "contract_id": "ee0caf3a-cdb1-421c-9c0c-eab4a1ebcfb1"}, {"label": "Empresa E - Serviços", "value": 40000.0, "event": "Inadimplemento de qualquer obrigação contratual pelo Fornecedor não sanado no prazo concedido.", "contract_id": "54e517cc-7e4a-4fbc-9cc8-cbb35eb13694"}, {"label": "Empresa D - Indústria", "value": 45000.0, "event": "Danos diretos causados por culpa exclusiva do b/Luz, limitado ao valor agregado de 100% do contrato.", "contract_id": "01999cfe-c321-7e0a-a85d-bb0f099e732c"}, {"label": "Empresa C - Varejo", "value": 54181.8, "event": "Atraso na entrega do pedido, limitado a 10% do valor total do pedido.", "contract_id": "01999cf7-59a6-7bc5-81d0-e7cc849ca7f3"}, {"label": "Empresa B - Financeiro", "value": 64800.0, "event": "Descumprimento da Legislação Aplicável de proteção de dados, disposições contratuais ou instruções do Controlador.", "contract_id": "01999d13-5515-7d6c-9182-22382f48aad9"}, {"label": "Empresa A - Tecnologia", "value": 250000.0, "event": "Desrespeito aos termos e condições de confidencialidade, incluindo o descumprimento da obrigação principal e/ou das obrigações assessórias de confidencialidade e proteção às Informações Confidenciais.", "contract_id": "01999d6e-8076-7382-be3f-fdf3a60a1a8c"}];
         const totalValue = chartData.reduce((sum, d) => sum + d.value, 0);
 
-        // Cores gradiente (do menor para maior valor)
-        const colors = [
-            '#10b981', '#14b8a6', '#06b6d4', '#0ea5e9', '#3b82f6',
-            '#6366f1', '#8b5cf6', '#a855f7', '#d946ef', '#f43f5e', '#ef4444', '#dc2626'
+        // Cores da identidade ELIEX.AI
+        const elexaOrange = '#E94E1B';
+        const elexaWhite = '#FCFCFC';
+        const elexaDark = '#28313B';
+        
+        // Gradientes personalizados para as barras (do menor para maior valor)
+        const barColors = [
+            '#34d399', '#2dd4bf', '#22d3ee', '#38bdf8', '#60a5fa',
+            '#818cf8', '#a78bfa', '#c084fc', '#e879f9', '#f472b6', 
+            '#fb7185', elexaOrange
         ];
 
         // Configuração do gráfico de barras (Exposição)
         const ctx = document.getElementById('riskChart').getContext('2d');
-        const gradients = colors.map((color, i) => {
+        const gradients = barColors.map((color, i) => {
             const gradient = ctx.createLinearGradient(0, 0, 600, 0);
-            gradient.addColorStop(0, color + '80');
+            gradient.addColorStop(0, color + '40');
             gradient.addColorStop(1, color);
             return gradient;
         });
@@ -351,13 +575,13 @@
                     label: 'Valor da Multa (BRL)',
                     data: chartData.map(d => d.value),
                     backgroundColor: gradients,
-                    borderColor: colors,
+                    borderColor: barColors,
                     borderWidth: 2,
                     borderRadius: 8,
                     borderSkipped: false,
-                    hoverBackgroundColor: colors.map(c => c + 'DD'),
+                    hoverBackgroundColor: barColors.map(c => c + 'DD'),
                     hoverBorderWidth: 3,
-                    hoverBorderColor: '#ffffff'
+                    hoverBorderColor: elexaWhite
                 }]
             },
             options: {
@@ -377,12 +601,14 @@
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                        titleColor: '#60a5fa',
-                        bodyColor: '#e2e8f0',
-                        borderColor: 'rgba(96, 165, 250, 0.3)',
+                        backgroundColor: 'rgba(27, 27, 27, 0.95)',
+                        titleColor: elexaOrange,
+                        bodyColor: elexaWhite,
+                        borderColor: 'rgba(233, 78, 27, 0.3)',
                         borderWidth: 1,
                         padding: 12,
+                        cornerRadius: 8,
+                        displayColors: false,
                         callbacks: {
                             label: function(context) {
                                 return 'R$ ' + context.parsed.x.toLocaleString('pt-BR', {minimumFractionDigits: 2});
@@ -396,7 +622,7 @@
                     datalabels: {
                         anchor: 'end',
                         align: 'end',
-                        color: '#e2e8f0',
+                        color: elexaWhite,
                         font: { weight: 'bold', size: 11 },
                         formatter: function(value) {
                             return 'R$ ' + (value / 1000).toFixed(1) + 'k';
@@ -406,15 +632,21 @@
                 scales: {
                     x: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(148, 163, 184, 0.1)', drawBorder: false },
+                        grid: { 
+                            color: 'rgba(252, 252, 252, 0.05)', 
+                            drawBorder: false 
+                        },
                         ticks: {
-                            color: '#94a3b8',
+                            color: '#9CA3AF',
                             callback: function(value) { return 'R$ ' + (value / 1000) + 'k'; }
                         }
                     },
                     y: {
                         grid: { display: false, drawBorder: false },
-                        ticks: { color: '#e2e8f0', font: { weight: '500', size: 11 } }
+                        ticks: { 
+                            color: elexaWhite, 
+                            font: { weight: '500', size: 11 } 
+                        }
                     }
                 },
                 animation: { duration: 1500, easing: 'easeOutQuart' }
@@ -427,8 +659,8 @@
 
         // Criar gradiente para área
         const gradientFill = ctxCiclo.createLinearGradient(0, 0, 0, 400);
-        gradientFill.addColorStop(0, 'rgba(139, 92, 246, 0.4)');
-        gradientFill.addColorStop(1, 'rgba(139, 92, 246, 0.0)');
+        gradientFill.addColorStop(0, 'rgba(233, 78, 27, 0.3)');
+        gradientFill.addColorStop(1, 'rgba(233, 78, 27, 0.0)');
 
         const cicloChart = new Chart(ctxCiclo, {
             type: 'line',
@@ -437,11 +669,11 @@
                 datasets: [{
                     label: 'Contratos a Vencer',
                     data: [20, 9, 7, 10, 6, 10, 13, 8, 2, 3, 4, 9],
-                    borderColor: '#8b5cf6',
+                    borderColor: elexaOrange,
                     backgroundColor: gradientFill,
                     borderWidth: 3,
-                    pointBackgroundColor: '#a78bfa',
-                    pointBorderColor: '#ffffff',
+                    pointBackgroundColor: elexaOrange,
+                    pointBorderColor: elexaWhite,
                     pointBorderWidth: 2,
                     pointRadius: 6,
                     pointHoverRadius: 8,
@@ -459,12 +691,13 @@
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                        titleColor: '#a78bfa',
-                        bodyColor: '#e2e8f0',
-                        borderColor: 'rgba(139, 92, 246, 0.3)',
+                        backgroundColor: 'rgba(27, 27, 27, 0.95)',
+                        titleColor: elexaOrange,
+                        bodyColor: elexaWhite,
+                        borderColor: 'rgba(233, 78, 27, 0.3)',
                         borderWidth: 1,
                         padding: 12,
+                        cornerRadius: 8,
                         callbacks: {
                             label: function(context) {
                                 return context.parsed.y + ' contratos';
@@ -474,13 +707,22 @@
                 },
                 scales: {
                     x: {
-                        grid: { color: 'rgba(148, 163, 184, 0.1)', drawBorder: false },
-                        ticks: { color: '#94a3b8' }
+                        grid: { 
+                            color: 'rgba(252, 252, 252, 0.05)', 
+                            drawBorder: false 
+                        },
+                        ticks: { color: '#9CA3AF' }
                     },
                     y: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(148, 163, 184, 0.1)', drawBorder: false },
-                        ticks: { color: '#94a3b8', stepSize: 5 }
+                        grid: { 
+                            color: 'rgba(252, 252, 252, 0.05)', 
+                            drawBorder: false 
+                        },
+                        ticks: { 
+                            color: '#9CA3AF', 
+                            stepSize: 5 
+                        }
                     }
                 },
                 animation: { duration: 2000, easing: 'easeOutQuart' }
@@ -503,18 +745,25 @@
 
             panel.innerHTML = `
                 <div class="details-title">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
                     Detalhes do Risco
                 </div>
                 <div class="details-content">
                     <p><strong>Contraparte:</strong> ${data.label}</p>
-                    <p style="margin-top: 8px;"><strong>Exposição:</strong> <span style="color: #fbbf24; font-size: 1.1rem;">R$ ${data.value.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></p>
+                    <p style="margin-top: 10px;"><strong>Exposição:</strong> <span style="color: var(--elexa-orange); font-size: 1.2rem; font-weight: 700;">R$ ${data.value.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></p>
                     <span class="risk-badge ${riskClass}">${riskText} Risco (${percentage}%)</span>
-                    <p style="margin-top: 12px; font-size: 0.85rem; color: #94a3b8;"><strong>Evento:</strong> ${data.event}</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem; color: var(--gray-medium); line-height: 1.6;"><strong>Evento:</strong> ${data.event}</p>
                 </div>
             `;
+            
+            // Animação suave na atualização
+            panel.style.opacity = '0';
+            setTimeout(() => {
+                panel.style.transition = 'opacity 0.3s ease';
+                panel.style.opacity = '1';
+            }, 50);
         }
     </script>
 </body>
